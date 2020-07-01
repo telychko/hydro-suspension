@@ -26,7 +26,7 @@ void updateWheel(Wheel &w, int value) {
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 void loop() {
@@ -35,6 +35,7 @@ void loop() {
   updateWheel(wheels[WHEEL_REAR_LEFT  ], analogRead(A2));
   updateWheel(wheels[WHEEL_REAR_RIGHT ], analogRead(A3));
 
+  Serial.print("\ec");
   Serial.println(wheels[WHEEL_FRONT_LEFT].sum/AVG_SIZE);
-  delay(1);
+  delay(3000);
 }
