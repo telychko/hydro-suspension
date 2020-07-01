@@ -25,8 +25,14 @@ void updateWheel(Wheel &w, int value) {
     w.vptr = 0;
 }
 
+void cbInterrupt() {
+  Serial.println("INTERRUPT");
+}
+
 void setup() {
   Serial.begin(115200);
+
+  attachInterrupt(digitalPinToInterrupt(2), cbInterrupt, CHANGE);
 }
 
 void loop() {
