@@ -33,6 +33,25 @@ void setup() {
   Serial.begin(115200);
 
   attachInterrupt(digitalPinToInterrupt(2), cbInterrupt, CHANGE);
+
+  // Timer
+  // COM - Compare output mode
+  // WGM - Waveform generation mode
+  // ICNC - Input capture noise canceler
+  // ICES - Input capture edge select
+  // CS - Clock select
+  cli();      // disable interrupts
+  TCCR1A = 1<<WGM12; // Timer counter control register
+  TCCR1B = 1<<CS12 | 1<<CS10; // Timer counter control register
+  OCR1A = 1024;  // output compare register
+  OCR1B = 0;  // output compare register
+  TCNT1 = 0;  // timer counter 
+  TIMSK1 = 1<<OCIE1A; // timer interrupt mask
+  sei();      // enable interrupts
+}
+
+ISR(TIMER1_COMPA_vect) {
+  Serial.println("TIMER INTERRUPT");
 }
 
 void loop() {
