@@ -32,14 +32,10 @@ void cbInterrupt() {
 void setup() {
   Serial.begin(115200);
 
+  // button
   attachInterrupt(digitalPinToInterrupt(2), cbInterrupt, CHANGE);
 
   // Timer
-  // COM - Compare output mode
-  // WGM - Waveform generation mode
-  // ICNC - Input capture noise canceler
-  // ICES - Input capture edge select
-  // CS - Clock select
   cli();      // disable interrupts
   TCCR1A = 0; // Timer counter control register
   TCCR1B = 1<<CS12 | 1<<CS10 | 1<<WGM12; // Timer counter control register
