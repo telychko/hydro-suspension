@@ -1,4 +1,5 @@
 #define AVG_SIZE 64 // 1..255
+#define LEDPIN 13
 
 struct Wheel {
   int values[AVG_SIZE];
@@ -17,6 +18,15 @@ enum {
 
 Wheel wheels[WHEEL_END];
 
+enum {
+  EVENT_READ_SENSORS = 1<<0,
+  EVENT_DEBUG        = 1<<1,
+  EVENT_BUTTON       = 1<<2,
+};
+
+static volatile int event;
+static volatile int clock;
+
 void updateWheel(Wheel &w, int value) {
   w.sum -= w.values[w.vptr];
   w.sum += value;
@@ -26,7 +36,7 @@ void updateWheel(Wheel &w, int value) {
 }
 
 void cbInterrupt() {
-  Serial.println("INTERRUPT");
+  event |= EVENT_BUTTON;
 }
 
 void setup() {
@@ -47,16 +57,39 @@ void setup() {
 }
 
 ISR(TIMER1_COMPA_vect) {
-  Serial.println("TIMER INTERRUPT");
+  if ( (clock&0x3F) == 0 )
+    event |= EVENT_READ_SENSORS;
+  if ( (clock&0x3FF) == 0 )
+    event |= EVENT_DEBUG;
+  clock++;
 }
 
-void loop() {
+void updateWheels() {
   updateWheel(wheels[WHEEL_FRONT_LEFT ], analogRead(A0));
   updateWheel(wheels[WHEEL_FRONT_RIGHT], analogRead(A1));
   updateWheel(wheels[WHEEL_REAR_LEFT  ], analogRead(A2));
   updateWheel(wheels[WHEEL_REAR_RIGHT ], analogRead(A3));
+}
 
-  Serial.print("\ec");
-  Serial.println(wheels[WHEEL_FRONT_LEFT].sum/AVG_SIZE);
-  delay(3000);
+void loop() {
+  cli();
+  int e = event;
+  event = 0;
+  sei();
+
+  if ( e & EVENT_READ_SENSORS ) {
+    digitalWrite(LEDPIN, !digitalRead(LEDPIN));
+    updateWheels();
+  }
+  if ( e & EVENT_DEBUG ) {
+    Serial.print("\ec");
+    Serial.println("WHEEL VALUES:");
+    Serial.print(wheels[WHEEL_FRONT_LEFT].sum/AVG_SIZE) ;Serial.print(" | ");
+    Serial.print(wheels[WHEEL_FRONT_RIGHT].sum/AVG_SIZE);Serial.print(" | ");
+    Serial.print(wheels[WHEEL_REAR_LEFT].sum/AVG_SIZE)  ;Serial.print(" | ");
+    Serial.println(wheels[WHEEL_REAR_RIGHT].sum/AVG_SIZE);
+  }
+  if ( e & EVENT_BUTTON ) {
+    Serial.println("Button action");
+  }
 }
