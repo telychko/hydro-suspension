@@ -41,11 +41,11 @@ void setup() {
   // ICES - Input capture edge select
   // CS - Clock select
   cli();      // disable interrupts
-  TCCR1A = 1<<WGM12; // Timer counter control register
-  TCCR1B = 1<<CS12 | 1<<CS10; // Timer counter control register
-  OCR1A = 1024;  // output compare register
+  TCCR1A = 0; // Timer counter control register
+  TCCR1B = 1<<CS12 | 1<<CS10 | 1<<WGM12; // Timer counter control register
+  OCR1A = 15;  // output compare register
   OCR1B = 0;  // output compare register
-  TCNT1 = 0;  // timer counter 
+  TCNT1 = 0;  // timer counter
   TIMSK1 = 1<<OCIE1A; // timer interrupt mask
   sei();      // enable interrupts
 }
