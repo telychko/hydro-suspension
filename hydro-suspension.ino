@@ -56,11 +56,13 @@ void setup() {
   sei();      // enable interrupts
 }
 
+// 1ms timer
 ISR(TIMER1_COMPA_vect) {
-  if ( (clock&0x3F) == 0 )
+  if ( (clock&0x7F) == 0 ) {
     event |= EVENT_READ_SENSORS;
-  if ( (clock&0x3FF) == 0 )
-    event |= EVENT_DEBUG;
+    if ( (clock&0x3FF) == 0 )
+      event |= EVENT_DEBUG;
+  }
   clock++;
 }
 
