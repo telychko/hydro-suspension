@@ -25,6 +25,11 @@ void turnLedAccordingAnalogValue(int minValue, int maxValue, char port, int dela
   printMessages(sensorValue, ledValue);
   digitalWrite(LED_BUILTIN, ledValue);
 
+  // XXX
+  //printMessages(analogRead(port), getLedValue(minValue, maxValue, analogRead(port)));
+  //digitalWrite(LED_BUILTIN, getLedValue(minValue, maxValue, analogRead(port)));
+  //
+
   delay(delayMs);
 }
 
