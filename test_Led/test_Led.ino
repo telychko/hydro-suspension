@@ -19,22 +19,16 @@ void loop() {
  * param 'delay' - delay between request in MS,
  */
 void turnLedAccordingAnalogValue(int minValue, int maxValue, char port, int delayMs) {
-  int sensorValue = analogRead(port);
-  int ledValue = getLedValue(minValue, maxValue, sensorValue);
 
-  printMessages(sensorValue, ledValue);
-  digitalWrite(LED_BUILTIN, ledValue);
-
-  // XXX
-  //printMessages(analogRead(port), getLedValue(minValue, maxValue, analogRead(port)));
-  //digitalWrite(LED_BUILTIN, getLedValue(minValue, maxValue, analogRead(port)));
-  //
+  printMessages(analogRead(port), getLedValue(minValue, maxValue, analogRead(port)));
+  digitalWrite(LED_BUILTIN, getLedValue(minValue, maxValue, analogRead(port)));
+  
 
   delay(delayMs);
 }
 
 int getLedValue(int minValue, int maxValue, int value) {
-  return value > maxValue | value < minValue ? HIGH : LOW;
+  return value > maxValue || value < minValue ? HIGH : LOW;
 }
 
 String getWarningText(int value) {
