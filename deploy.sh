@@ -9,5 +9,5 @@ $ARDUINO_HOME/hardware/tools/avr/bin/avrdude             \
     -b 57600                                             \
     -c arduino                                           \
     -p m328p                                             \
-    -U flash:w:build/hydro-suspension.ino.hex:i          \
-    -U eeprom:w:build/hydro-suspension.ino.eep:i
+    -U flash:w:build/"$1".hex:i                          \
+    -U eeprom:w:build/"$1".eep:i

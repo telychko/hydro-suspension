@@ -14,5 +14,5 @@ arduino-builder                                                                \
     -prefs "compiler.path=$ARDUINO_HOME/hardware/tools/avr/bin/"               \
     -prefs "tools.ctags.path=$ARDUINO_HOME/tools-builder/ctags/5.8-arduino11/" \
     -verbose                                                                   \
-    -build-path build \
-    hydro-suspension.ino
+    -build-path build                                                          \
+    "$1"
